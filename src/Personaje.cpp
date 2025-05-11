@@ -6,10 +6,10 @@ Personaje::Personaje(int x, int y, int vida, char simbolo)
 
 void Personaje::mover(char direccion) {
     switch (direccion) {
-        case 'w': y--; break;
-        case 's': y++; break;
-        case 'a': x--; break;
-        case 'd': x++; break;
+        case 'w': if (y > 0) y--; break;
+        case 's': if (y < 19) y++; break;
+        case 'a': if (x > 0) x--; break;
+        case 'd': if (x < 19) x++; break;
     }
 }
 

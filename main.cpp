@@ -8,12 +8,20 @@ const int WIDTH = 20;
 const int HEIGHT = 20;
 char mapa[HEIGHT][WIDTH];
 
+// Verificar si jugador pisa un recurso 'o'
+void verificarRecolecta(Jugador& jugador) {
+    if (mapa[jugador.getY()][jugador.getX()] == 'o') {
+        jugador.recolectar();
+        mapa[jugador.getY()][jugador.getX()] = ' ';
+    }
+}
+
 // Limpiar pantalla (consola)
 void limpiarPantalla() {
     system("clear");
 }
 
-// Dibujar mapa
+// Dibujar mapa con todos los elementos
 void dibujarMapa(Jugador& jugador) {
     limpiarPantalla();
 
@@ -22,16 +30,16 @@ void dibujarMapa(Jugador& jugador) {
         for (int j = 0; j < WIDTH; ++j)
             mapa[i][j] = ' ';
 
-    // Colocar algunos recursos
+    // Colocar recursos
     mapa[5][5] = 'o';
     mapa[3][10] = 'o';
     mapa[15][4] = 'o';
 
-    // Aliados (verde)
+    // Aliados
     mapa[18][2] = 'W';
     mapa[18][17] = 'W';
 
-    // Enemigos (rojo)
+    // Enemigos
     mapa[4][1] = 'X';
     mapa[10][12] = 'X';
     mapa[6][18] = 'X';
@@ -39,8 +47,10 @@ void dibujarMapa(Jugador& jugador) {
     // Posicionar jugador
     mapa[jugador.getY()][jugador.getX()] = '@';
 
-    // Dibujar en consola
-    std::cout << "VIDAS: " << jugador.getVida() << "\n\n";
+    // Dibujar mapa en consola
+    std::cout << "VIDAS: " << jugador.getVida()
+              << "   RECURSOS RECOLECTADOS: " << jugador.getRecursos() << "\n\n";
+
     for (int i = 0; i < HEIGHT; ++i) {
         for (int j = 0; j < WIDTH; ++j)
             std::cout << mapa[i][j] << ' ';
@@ -48,7 +58,7 @@ void dibujarMapa(Jugador& jugador) {
     }
 }
 
-// Verificar colisiones simples
+// Verificar colisión con enemigo
 void verificarColision(Jugador& jugador) {
     char celda = mapa[jugador.getY()][jugador.getX()];
     if (celda == 'X') {
@@ -70,7 +80,7 @@ int main() {
         if (tecla == 'q' || tecla == 'Q') break;
 
         jugador.mover(tecla);
-
+        verificarRecolecta(jugador);
         verificarColision(jugador);
     }
 
